@@ -5,6 +5,8 @@ import { ChuckCard } from "./components";
 import { ChuckGridviewStyle, RandomButton, RootPageStyle } from "./style";
 import { LoadingCard } from "../../core/components";
 import { useNavigate } from "react-router-dom";
+import { chuckSlice, selectChucks } from "../../core/context/reducers";
+import { useDispatch, useSelector } from "react-redux";
 
 type HomePageProps = {
   randomChuck: RandomChuck;
@@ -12,8 +14,10 @@ type HomePageProps = {
 
 export const HomePage: React.FC<HomePageProps> = ({ randomChuck }) => {
   const navigate = useNavigate();
+  const chucks = useSelector(selectChucks)
+  const dispatch = useDispatch();
 
-  const [chucks, setChucks] = useState<Chuck.Model[]>([]);
+  // const [chucks, setChucks] = useState<Chuck.Model[]>([]);
   const [loading, setLoading] = useState(false);
 
   const getRandomChuck = (): void => {
@@ -23,7 +27,8 @@ export const HomePage: React.FC<HomePageProps> = ({ randomChuck }) => {
       randomChuck
         .random()
         .then((data) => {
-          setChucks(chucks?.concat(data));
+          dispatch(chuckSlice.actions.add(data))
+          // setChucks(chucks?.concat(data));
         })
         .catch((error) => console.log(error))
         .finally(() => setLoading(false));
