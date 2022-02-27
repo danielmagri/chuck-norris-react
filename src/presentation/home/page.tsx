@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { Chuck } from "../../domain/models";
+import React, { useState } from "react";
 import { RandomChuck } from "../../domain/usecases";
 import { ChuckCard } from "./components";
-import { ChuckGridviewStyle, RandomButton, RootPageStyle } from "./style";
+import { ChuckGridviewStyle, ButtonStyle, RootPageStyle } from "./style";
 import { LoadingCard } from "../../core/components";
 import { useNavigate } from "react-router-dom";
 import { chuckSlice, selectChucks } from "../../core/context/reducers";
 import { useDispatch, useSelector } from "react-redux";
+import { Box } from "@mui/material";
 
 type HomePageProps = {
   randomChuck: RandomChuck;
@@ -14,10 +14,9 @@ type HomePageProps = {
 
 export const HomePage: React.FC<HomePageProps> = ({ randomChuck }) => {
   const navigate = useNavigate();
-  const chucks = useSelector(selectChucks)
+  const chucks = useSelector(selectChucks);
   const dispatch = useDispatch();
 
-  // const [chucks, setChucks] = useState<Chuck.Model[]>([]);
   const [loading, setLoading] = useState(false);
 
   const getRandomChuck = (): void => {
@@ -27,28 +26,40 @@ export const HomePage: React.FC<HomePageProps> = ({ randomChuck }) => {
       randomChuck
         .random()
         .then((data) => {
-          dispatch(chuckSlice.actions.add(data))
-          // setChucks(chucks?.concat(data));
+          dispatch(chuckSlice.actions.add(data));
         })
         .catch((error) => console.log(error))
         .finally(() => setLoading(false));
     }
   };
 
-  useEffect(() => {
-    document.title = `${chucks.length} jokes`;
-  });
+  const clickHandler = (id: String): void => {
+    navigate(`details/${id}`);
+  };
 
-  const clickHandler = (): void => {
-    navigate("details");
+  const onClickClear = (): void => {
+    dispatch(chuckSlice.actions.clear());
   };
 
   return (
     <RootPageStyle>
-      <RandomButton onClick={getRandomChuck}>Random</RandomButton>
+      <Box
+        sx={{
+          marginTop: '20px',
+          marginBottom: '32px',
+        }}
+      >
+        <ButtonStyle onClick={getRandomChuck}>Random</ButtonStyle>
+        <ButtonStyle onClick={onClickClear}>Clear</ButtonStyle>
+      </Box>
+
       <ChuckGridviewStyle>
         {chucks?.map((chuck) => (
-          <ChuckCard key={chuck.id} chuck={chuck} onClick={clickHandler} />
+          <ChuckCard
+            key={chuck.id}
+            chuck={chuck}
+            onClick={() => clickHandler(chuck.id)}
+          />
         ))}
         {loading && <LoadingCard />}
       </ChuckGridviewStyle>

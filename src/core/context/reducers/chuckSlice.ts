@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Chuck } from "../../../domain/models";
-import store from "../store";
 
 type ChuckStore = {
   chucks: Chuck.Model[];
@@ -26,3 +25,7 @@ export const chuckSlice = createSlice({
 export const { add, clear } = chuckSlice.actions;
 
 export const selectChucks = (state: any): Chuck.Model[] => state.chuck.chucks;
+export const selectChuck =
+  (id: String) =>
+  (state: any): Chuck.Model | undefined =>
+    (state.chuck.chucks as Chuck.Model[]).find((chuck) => chuck.id === id);

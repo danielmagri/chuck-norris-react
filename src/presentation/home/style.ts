@@ -17,7 +17,10 @@ export const ChuckGridviewStyle = styled("div")({
   borderRadius: 4,
 });
 
-export const RandomButton = styled("a")(({ theme }) => ({
+
+
+
+export const ButtonStyle = styled("a")(({ theme }) => ({
   fontWeight: "bolder",
   textTransform: "uppercase",
   fontSize: 25,
@@ -27,8 +30,8 @@ export const RandomButton = styled("a")(({ theme }) => ({
   paddingBottom: 10,
   paddingLeft: 20,
   paddingRight: 20,
-  marginTop: 20,
-  marginBottom: 32,
+  marginRight: 8,
+  marginLeft: 8,
   boxShadow: "4px 6px",
   ":hover": {
     cursor: "pointer",
